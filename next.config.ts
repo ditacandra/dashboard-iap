@@ -2,11 +2,11 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   eslint: {
-    // 🚫 Jangan hentikan build gara-gara ada error lint
+    // 🚫 Abaikan error ESLint saat build
     ignoreDuringBuilds: true,
   },
   typescript: {
-    // 🚫 Jangan hentikan build gara-gara error TypeScript
+    // 🚫 Abaikan error TypeScript saat build
     ignoreBuildErrors: true,
   },
 };
