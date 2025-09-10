@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import Papa from "papaparse";
 import { useRouter, useSearchParams } from "next/navigation";
+
+export const dynamic = "force-dynamic"; // cegah prerender error
 
 interface User {
   username: string;
@@ -11,7 +13,7 @@ interface User {
   access?: string;
 }
 
-export default function LoginPage() {
+function LoginContent() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -104,5 +106,13 @@ export default function LoginPage() {
         </button>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <LoginContent />
+    </Suspense>
   );
 }
