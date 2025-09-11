@@ -120,9 +120,13 @@ const GrafikSilaProvinsi: FC<GrafikSilaProvinsiProps> = ({ tahun }) => {
         </BarChart>
       </ResponsiveContainer>
 
-      <div className="mt-3 flex flex-wrap justify-center gap-4">
+      {/* Legend */}
+      <div className="mt-3 flex flex-wrap justify-center gap-2 sm:gap-4 max-w-full overflow-x-auto px-2">
         {legendPayload.map((item) => (
-          <div key={item.value} className="flex items-center space-x-2">
+          <div
+            key={item.value}
+            className="flex items-center space-x-2 whitespace-nowrap"
+          >
             <span
               style={{
                 display: "inline-block",
