@@ -156,15 +156,15 @@ export default function NasionalPage() {
         </div>
 
         {/* Grafik Per Sila & Per Indikator */}
-        <div className="mb-8 grid grid-cols-20 gap-4">
-          <div
-            className="col-span-6 p-4 rounded-2xl bg-white/50 backdrop-blur-sm shadow-lg border border-gray-200"
+        <div className="mb-8 grid grid-cols-12 gap-4">
+        <div
+            className="col-span-4 p-4 rounded-2xl bg-white/50 backdrop-blur-sm shadow-lg border border-gray-200"
             style={{ height: 330 }}
           >
             <GrafikPerSila data={filteredSila} tahun={tahunTerpilih} />
           </div>
           <div
-            className="col-span-14 p-4 rounded-2xl bg-white/50 backdrop-blur-sm shadow-lg border border-gray-200"
+            className="col-span-8 p-4 rounded-2xl bg-white/50 backdrop-blur-sm shadow-lg border border-gray-200"
             style={{ height: 330 }}
           >
             <GrafikPerIndikator
@@ -185,15 +185,15 @@ export default function NasionalPage() {
         </div>
 
         {/* Grafik SilaPerTahun & IndikatorPerTahun */}
-        <div className="mb-8 grid grid-cols-20 gap-4">
+        <div className="mb-8 grid grid-cols-12 gap-4">
           <div
-            className="col-span-6 p-4 rounded-2xl bg-white/50 backdrop-blur-sm shadow-lg border border-gray-200"
+            className="col-span-4 p-4 rounded-2xl bg-white/50 backdrop-blur-sm shadow-lg border border-gray-200"
             style={{ height: 330 }}
           >
             <GrafikSilaPerTahun data={filteredSilaPerTahun} silaColors={silaColors} />
           </div>
           <div
-            className="col-span-14 p-4 rounded-2xl bg-white/50 backdrop-blur-sm shadow-lg border border-gray-200"
+            className="col-span-8 p-4 rounded-2xl bg-white/50 backdrop-blur-sm shadow-lg border border-gray-200"
             style={{ height: 330 }}
           >
             <GrafikIndikatorPerTahun
