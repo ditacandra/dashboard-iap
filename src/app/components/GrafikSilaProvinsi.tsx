@@ -22,14 +22,7 @@ interface GrafikSilaProvinsiProps {
   tahun: number;
 }
 
-const colors = [
-  "#D9D9D9",
-  "#A6A6A6",
-  "#7F7F7F",
-  "#F4B183",
-  "#ED7D31",
-  "#B40000",
-];
+const colors = ["#D9D9D9", "#A6A6A6", "#7F7F7F", "#F4B183", "#ED7D31", "#B40000"];
 const indonesiaColors = [
   "#cce9b9ff",
   "#88a674ff",
@@ -134,9 +127,9 @@ const GrafikSilaProvinsi: FC<GrafikSilaProvinsiProps> = ({ tahun }) => {
         </BarChart>
       </ResponsiveContainer>
 
-      {/* Legend yang responsif */}
-      <div className="mt-3 w-full max-w-full">
-        <div className="flex flex-wrap justify-center gap-2 sm:gap-4 overflow-hidden">
+      {/* 🔥 Legend responsif */}
+      <div className="mt-3 w-full overflow-x-auto">
+        <div className="flex flex-nowrap justify-start sm:justify-center gap-3 px-2 min-w-max">
           {legendPayload.map((item) => (
             <div
               key={item.value}
