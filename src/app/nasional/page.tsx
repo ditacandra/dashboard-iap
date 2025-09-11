@@ -116,7 +116,6 @@ export default function NasionalPage() {
       <div className="p-6 pt-10">
         {/* Judul Atas */}
         <div className="text-center mb-10">
-        
           <h1
             className="mt-4 text-3xl md:text-4xl font-extrabold 
             bg-gradient-to-r from-red-600 via-yellow-500 to-blue-600 
@@ -124,14 +123,11 @@ export default function NasionalPage() {
           >
             INDEKS AKTUALISASI PANCASILA (IAP) NASIONAL
           </h1>
-        <div className="mt-2 text-3xl md:text-3xl font-extrabold 
-            bg-gradient-to-r from-red-600 via-yellow-500 to-blue-600 
-            bg-clip-text text-transparent tracking-wide drop-shadow-lg">
-        <p>
-          2021-2025
-        </p>
-        </div>
-
+          <div className="mt-2 text-3xl md:text-3xl font-extrabold 
+              bg-gradient-to-r from-red-600 via-yellow-500 to-blue-600 
+              bg-clip-text text-transparent tracking-wide drop-shadow-lg">
+            <p>2021-2025</p>
+          </div>
           <div className="mt-2 h-1 w-40 bg-gradient-to-r from-red-500 to-blue-600 mx-auto rounded-full"></div>
         </div>
 
@@ -141,8 +137,7 @@ export default function NasionalPage() {
         </div>
 
         {/* Grafik Per Tahun */}
-        <div className="mb-8 p-4 rounded-2xl bg-white backdrop-blur-sm shadow-lg border border-gray-200"
-      >
+        <div className="mb-8 p-4 rounded-2xl bg-white backdrop-blur-sm shadow-lg border border-gray-200">
           <GrafikPerTahun data={dataPerTahun} />
         </div>
 
@@ -156,22 +151,26 @@ export default function NasionalPage() {
         </div>
 
         {/* Grafik Per Sila & Per Indikator */}
-        <div className="mb-8 grid grid-cols-12 gap-4">
-        <div
-            className="col-span-4 p-4 rounded-2xl bg-white/50 backdrop-blur-sm shadow-lg border border-gray-200"
-            style={{ height: 330 }}
+        <div className="mb-8 grid grid-cols-1 md:grid-cols-12 gap-4">
+          <div
+            className="col-span-1 md:col-span-4 p-4 rounded-2xl bg-white/50 backdrop-blur-sm shadow-lg border border-gray-200 
+                       overflow-x-auto md:overflow-visible"
           >
-            <GrafikPerSila data={filteredSila} tahun={tahunTerpilih} />
+            <div className="min-w-[400px] md:min-w-0" style={{ height: 330 }}>
+              <GrafikPerSila data={filteredSila} tahun={tahunTerpilih} />
+            </div>
           </div>
           <div
-            className="col-span-8 p-4 rounded-2xl bg-white/50 backdrop-blur-sm shadow-lg border border-gray-200"
-            style={{ height: 330 }}
+            className="col-span-1 md:col-span-8 p-4 rounded-2xl bg-white/50 backdrop-blur-sm shadow-lg border border-gray-200 
+                       overflow-x-auto md:overflow-visible"
           >
-            <GrafikPerIndikator
-              data={filteredIndikator}
-              tahun={tahunTerpilih}
-              silaColors={silaColors}
-            />
+            <div className="min-w-[600px] md:min-w-0" style={{ height: 330 }}>
+              <GrafikPerIndikator
+                data={filteredIndikator}
+                tahun={tahunTerpilih}
+                silaColors={silaColors}
+              />
+            </div>
           </div>
         </div>
 
@@ -185,21 +184,25 @@ export default function NasionalPage() {
         </div>
 
         {/* Grafik SilaPerTahun & IndikatorPerTahun */}
-        <div className="mb-8 grid grid-cols-12 gap-4">
+        <div className="mb-8 grid grid-cols-1 md:grid-cols-12 gap-4">
           <div
-            className="col-span-4 p-4 rounded-2xl bg-white/50 backdrop-blur-sm shadow-lg border border-gray-200"
-            style={{ height: 330 }}
+            className="col-span-1 md:col-span-4 p-4 rounded-2xl bg-white/50 backdrop-blur-sm shadow-lg border border-gray-200 
+                       overflow-x-auto md:overflow-visible"
           >
-            <GrafikSilaPerTahun data={filteredSilaPerTahun} silaColors={silaColors} />
+            <div className="min-w-[400px] md:min-w-0" style={{ height: 330 }}>
+              <GrafikSilaPerTahun data={filteredSilaPerTahun} silaColors={silaColors} />
+            </div>
           </div>
           <div
-            className="col-span-8 p-4 rounded-2xl bg-white/50 backdrop-blur-sm shadow-lg border border-gray-200"
-            style={{ height: 330 }}
+            className="col-span-1 md:col-span-8 p-4 rounded-2xl bg-white/50 backdrop-blur-sm shadow-lg border border-gray-200 
+                       overflow-x-auto md:overflow-visible"
           >
-            <GrafikIndikatorPerTahun
-              data={filteredIndikatorPerTahun}
-              silaColors={silaColors}
-            />
+            <div className="min-w-[600px] md:min-w-0" style={{ height: 330 }}>
+              <GrafikIndikatorPerTahun
+                data={filteredIndikatorPerTahun}
+                silaColors={silaColors}
+              />
+            </div>
           </div>
         </div>
 
