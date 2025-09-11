@@ -22,8 +22,22 @@ interface GrafikSilaProvinsiProps {
   tahun: number;
 }
 
-const colors = ["#D9D9D9", "#A6A6A6", "#7F7F7F", "#F4B183", "#ED7D31", "#B40000"];
-const indonesiaColors = ["#cce9b9ff", "#88a674ff", "#70AD47", "#2ca02c", "#548235", "#385723"];
+const colors = [
+  "#D9D9D9",
+  "#A6A6A6",
+  "#7F7F7F",
+  "#F4B183",
+  "#ED7D31",
+  "#B40000",
+];
+const indonesiaColors = [
+  "#cce9b9ff",
+  "#88a674ff",
+  "#70AD47",
+  "#2ca02c",
+  "#548235",
+  "#385723",
+];
 
 const GrafikSilaProvinsi: FC<GrafikSilaProvinsiProps> = ({ tahun }) => {
   const [data, setData] = useState<DataSilaProvinsi[]>([]);
@@ -120,26 +134,28 @@ const GrafikSilaProvinsi: FC<GrafikSilaProvinsiProps> = ({ tahun }) => {
         </BarChart>
       </ResponsiveContainer>
 
-      {/* Legend */}
-      <div className="mt-3 flex flex-wrap justify-center gap-2 sm:gap-4 max-w-full overflow-x-auto px-2">
-        {legendPayload.map((item) => (
-          <div
-            key={item.value}
-            className="flex items-center space-x-2 whitespace-nowrap"
-          >
-            <span
-              style={{
-                display: "inline-block",
-                width: 14,
-                height: 14,
-                backgroundColor: item.color,
-                borderRadius: 2,
-                boxShadow: "0 0 0 1px rgba(0,0,0,0.06) inset",
-              }}
-            />
-            <span style={{ color: "black", fontSize: 13 }}>{item.value}</span>
-          </div>
-        ))}
+      {/* Legend yang responsif */}
+      <div className="mt-3 w-full max-w-full">
+        <div className="flex flex-wrap justify-center gap-2 sm:gap-4 overflow-hidden">
+          {legendPayload.map((item) => (
+            <div
+              key={item.value}
+              className="flex items-center space-x-2 whitespace-nowrap text-xs sm:text-sm"
+            >
+              <span
+                style={{
+                  display: "inline-block",
+                  width: 14,
+                  height: 14,
+                  backgroundColor: item.color,
+                  borderRadius: 2,
+                  boxShadow: "0 0 0 1px rgba(0,0,0,0.06) inset",
+                }}
+              />
+              <span style={{ color: "black" }}>{item.value}</span>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
