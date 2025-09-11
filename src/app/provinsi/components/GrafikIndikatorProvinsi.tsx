@@ -222,67 +222,71 @@ const GrafikIndikatorProvinsi: React.FC<GrafikIndikatorProvinsiProps> = ({
         Tren Indikator – Sila {sila} – {namaProvinsi}
       </h2>
 
-      <ResponsiveContainer width="100%" height={420}>
-        <BarChart
-          data={dataWithIndex}
-          margin={{ top: 16, right: 24, left: 12, bottom: 56 }}
-          barCategoryGap="3%"
-        >
-          <CartesianGrid strokeDasharray="3 3" vertical={false} />
+      {/* 🔥 Tambahan: wrapper scroll horizontal di HP */}
+      <div className="overflow-x-auto">
+        <div className="min-w-[600px]">
+          <ResponsiveContainer width="100%" height={420}>
+            <BarChart
+              data={dataWithIndex}
+              margin={{ top: 16, right: 24, left: 12, bottom: 56 }}
+              barCategoryGap="3%"
+            >
+              <CartesianGrid strokeDasharray="3 3" vertical={false} />
 
-          <YAxis
-            type="number"
-            domain={[0, 100]}
-            tickCount={6}
-            tick={{ fontSize: 10, fill: "black" }}
-            label={{ value: "Nilai", angle: -90, position: "insideLeft" }}
-          />
-
-          {/* X Axis Tahun (dekat bar) */}
-          <XAxis
-            dataKey="Tahun"
-            xAxisId="indeks"
-            interval={0}
-            angle={-20}
-            textAnchor="end"
-            tick={{ fontSize: 10, fill: "black" }}
-            tickLine={false}
-          />
-
-          {/* X Axis Indikator (posisi tengah tiap grup) */}
-          <XAxis
-            dataKey="index"
-            xAxisId="indikator"
-            orientation="bottom"
-            height={20}
-            axisLine={false}
-            tickLine={false}
-            ticks={IndikatorTicks}
-            tickFormatter={(val: any) =>
-              typeof val === "number" ? IndikatorLabels[val] || "" : ""
-            }
-            tick={{ fontSize: 10, fill: "black", dy: 10 }}
-          />
-
-          <Tooltip content={<CustomTooltip />} />
-
-          {/* Bar pakai XAxis "indeks" */}
-          <Bar dataKey="Nilai" radius={[6, 6, 0, 0]} xAxisId="indeks">
-            {dataWithIndex.map((d, i) => (
-              <Cell
-                key={i}
-                fill={
-                  d._isGap
-                    ? "transparent"
-                    : tahunColors[d.Tahun as number] || "#9C27B0"
-                }
+              <YAxis
+                type="number"
+                domain={[0, 100]}
+                tickCount={6}
+                tick={{ fontSize: 10, fill: "black" }}
+                label={{ value: "Nilai", angle: -90, position: "insideLeft" }}
               />
-            ))}
-            {/* Label growth custom */}
-            <LabelList dataKey="Growth" content={<CustomGrowthLabel />} />
-          </Bar>
-        </BarChart>
-      </ResponsiveContainer>
+
+              {/* X Axis Tahun */}
+              <XAxis
+                dataKey="Tahun"
+                xAxisId="indeks"
+                interval={0}
+                angle={-20}
+                textAnchor="end"
+                tick={{ fontSize: 10, fill: "black" }}
+                tickLine={false}
+              />
+
+              {/* X Axis Indikator */}
+              <XAxis
+                dataKey="index"
+                xAxisId="indikator"
+                orientation="bottom"
+                height={20}
+                axisLine={false}
+                tickLine={false}
+                ticks={IndikatorTicks}
+                tickFormatter={(val: any) =>
+                  typeof val === "number" ? IndikatorLabels[val] || "" : ""
+                }
+                tick={{ fontSize: 10, fill: "black", dy: 10 }}
+              />
+
+              <Tooltip content={<CustomTooltip />} />
+
+              {/* Bar */}
+              <Bar dataKey="Nilai" radius={[6, 6, 0, 0]} xAxisId="indeks">
+                {dataWithIndex.map((d, i) => (
+                  <Cell
+                    key={i}
+                    fill={
+                      d._isGap
+                        ? "transparent"
+                        : tahunColors[d.Tahun as number] || "#9C27B0"
+                    }
+                  />
+                ))}
+                <LabelList dataKey="Growth" content={<CustomGrowthLabel />} />
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
     </div>
   );
 };
