@@ -81,7 +81,7 @@ const GrafikSilaProvinsi: FC<GrafikSilaProvinsiProps> = ({ tahun }) => {
         <BarChart
           data={grouped}
           layout="vertical"
-          margin={{ top: 20, right: 30, left: 1, bottom: 10 }}
+          margin={{ top: 20, right: 30, left: -80, bottom: 10 }}
         >
           <XAxis type="number" fontSize={12} tick={{ fill: "black" }} />
           <YAxis
