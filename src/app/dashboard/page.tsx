@@ -25,7 +25,7 @@ export default function DashboardPage() {
         <div className="flex items-center gap-2">
           <span className="font-semibold text-white">Halaman Provinsi:</span>
           <select
-            className="border rounded px-2 py-1 bg-white text-black text-black"
+            className="border rounded px-2 py-1 bg-white text-black"
             defaultValue=""
             onChange={(e) => {
               const val = e.target.value;

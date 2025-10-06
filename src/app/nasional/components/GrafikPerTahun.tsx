@@ -2,7 +2,7 @@
 import React, { useMemo } from "react";
 
 interface DataPerTahun {
-  Tahun: number;   // 0–100
+  Tahun: number; // 0–100
   Nilai: number;
   Delta?: number;
 }
@@ -19,6 +19,7 @@ const colorMap: Record<number, string> = {
 
 const format2 = (v: number) => v.toFixed(2);
 const abs2 = (v: number) => Math.abs(v).toFixed(2);
+const clampPct = (v: number) => Math.max(0, Math.min(100, v));
 
 const GrafikPerTahun: React.FC<GrafikPerTahunProps> = ({ data }) => {
   const rows = useMemo(() => [...data].sort((a, b) => a.Tahun - b.Tahun), [data]);
@@ -50,9 +51,7 @@ const GrafikPerTahun: React.FC<GrafikPerTahunProps> = ({ data }) => {
           )} menjadi ${format2(nilai2024)})`
         );
       } else {
-        parts.push(
-          `pada tahun 2024 **tetap** dibandingkan 2023 (tetap di ${format2(nilai2024)})`
-        );
+        parts.push(`pada tahun 2024 **tetap** dibandingkan 2023 (tetap di ${format2(nilai2024)})`);
       }
     }
 
@@ -81,50 +80,56 @@ const GrafikPerTahun: React.FC<GrafikPerTahunProps> = ({ data }) => {
   }, [nilai2021, nilai2023, nilai2024]);
 
   return (
-    <div className="p-6 rounded-2xl backdrop-blur-sm shadow-lg border border-pink-200"
-    style={{ backgroundImage: "url('/bg/bg7.jpg')" }}>
-      <h2 className="text-xl font-bold mb-4 text-red-600">
-        Tren Capaian IAP Nasional 2021–2024
-      </h2>
+    <div
+      className="p-6 rounded-2xl backdrop-blur-sm shadow-lg border border-pink-200"
+      style={{ backgroundImage: "url('/bg/bg7.jpg')" }}
+    >
+      <h2 className="text-xl font-bold mb-4 text-red-600">Tren Capaian IAP Nasional 2021–2024</h2>
 
       <div className="flex flex-col gap-4">
-        {rows.map((item) => (
-          <div key={item.Tahun} className="group flex items-center">
-            {/* TRACK */}
-            <div className="relative flex-1 h-10 rounded-full overflow-hidden ring-1 ring-black/5 transform transition-transform duration-300 group-hover:scale-105 group-hover:shadow-lg">
-              {/* FILL */}
-              <div
-                className={`${colorMap[item.Tahun]} h-full rounded-full relative transition-[width] duration-300 ease-out pr-12`}
-                style={{ width: `${item.Nilai}%` }}
-              >
-                {/* Tahun */}
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-white font-semibold drop-shadow select-none">
-                  {item.Tahun}
-                </span>
-                {/* Nilai */}
-                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-white font-bold drop-shadow select-none">
-                  {item.Nilai.toFixed(2)}
-                </span>
-              </div>
-            </div>
+        {rows.map((item) => {
+          const widthPct = clampPct(item.Nilai);
 
-            {/* Growth */}
-            {typeof item.Delta === "number" && (
-              <span
-                className={`ml-2 text-sm font-semibold ${
-                  item.Delta >= 0 ? "text-green-500" : "text-red-500"
-                }`}
-              >
-                {item.Delta >= 0 ? "▲" : "▼"} {Math.abs(item.Delta).toFixed(2)}
-              </span>
-            )}
-          </div>
-        ))}
+          return (
+            <div key={item.Tahun} className="group grid grid-cols-[1fr,auto] items-center gap-2">
+              {/* TRACK (kolom kiri) */}
+              <div className="relative w-full h-10 rounded-full overflow-hidden ring-1 ring-black/5 transform transition-transform duration-300 group-hover:scale-105 group-hover:shadow-lg bg-white/40">
+                {/* FILL */}
+                <div
+                  className={`${colorMap[item.Tahun] ?? "bg-slate-400"} h-full rounded-full relative transition-[width] duration-300 ease-out pr-12 box-border`}
+                  style={{ width: `${widthPct}%` }}
+                >
+                  {/* Tahun */}
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-white font-semibold drop-shadow select-none">
+                    {item.Tahun}
+                  </span>
+                  {/* Nilai */}
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-white font-bold drop-shadow select-none">
+                    {format2(item.Nilai)}
+                  </span>
+                </div>
+              </div>
+
+              {/* Growth (kolom kanan dengan lebar konsisten) */}
+              {typeof item.Delta === "number" ? (
+                <span
+                  className={`w-16 text-right text-sm font-semibold ${
+                    item.Delta >= 0 ? "text-green-500" : "text-red-500"
+                  }`}
+                >
+                  {item.Delta >= 0 ? "▲" : "▼"} {Math.abs(item.Delta).toFixed(2)}
+                </span>
+              ) : (
+                <span className="w-16" />
+              )}
+            </div>
+          );
+        })}
       </div>
 
       {insight && (
         <p className="mt-4 text-slate-700 text-sm">
-          {/** pakai dangerouslySetInnerHTML agar **bold** di dalam string tampil */}
+          {/* pakai dangerouslySetInnerHTML agar **bold** di dalam string tampil */}
           <span
             dangerouslySetInnerHTML={{
               __html: insight.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>"),
