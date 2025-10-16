@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import QRCode from "react-qr-code"; // ✅ Tambahan: QR library
 import { provinsiList } from "@/lib/provinsiList";
 
 export default function Home() {
@@ -11,8 +12,6 @@ export default function Home() {
 
   const handlePilihProvinsi = () => {
     if (!selectedProvinsi) return;
-
-    // Masuk ke halaman login dulu
     router.push(`/login?provinsi=${selectedProvinsi}`);
   };
 
@@ -21,12 +20,12 @@ export default function Home() {
 
   return (
     <main
-      className="min-h-screen bg-cover bg-center"
+      className="relative min-h-screen bg-cover bg-center"
       style={{ backgroundImage: "url('/bg/bg.png')" }}
     >
       <div className="flex flex-col md:flex-row min-h-screen px-6 md:px-16 bg-black/60 pt-12 md:pt-20">
         {/* Kiri */}
-        <div className="flex-1 flex flex-col items-start text-left text-white pr-0 md:pr-12 mb-8 md:mb-0">
+        <div className="flex-1 flex flex-col items-start text-left text-white pr-0 md:pr-12 mb-8 md:mb-0 relative">
           <h1 className="text-5xl md:text-6xl font-extrabold mb-4">
             INDEKS AKTUALISASI PANCASILA
           </h1>
@@ -51,9 +50,23 @@ export default function Home() {
           <h2 className="text-2xl md:text-3xl font-bold mb-2">
             Selamat Datang
           </h2>
-          <p className="text-xs md:text-sm text-gray-200 italic -mt-1">
-            Data yang ada dalam dashboard ini masih dalam bentuk dummy (belum merupakan angka real capaian IAP).
+          <p className="text-xs md:text-sm text-gray-200 italic -mt-1 mb-4">
+            Data yang ada dalam dashboard ini masih dalam bentuk dummy (belum
+            merupakan angka real capaian IAP).
           </p>
+
+          {/* ✅ QR code kecil di kiri bawah teks */}
+          <div className="flex items-center gap-2 bg-white/90 rounded-xl p-2 mt-2">
+            <QRCode
+              value="https://dashboard-iap.vercel.app/"
+              size={64} // ukuran kecil agar rapi
+              bgColor="#ffffff"
+              fgColor="#000000"
+            />
+            <span className="text-[10px] text-gray-700 font-medium leading-tight">
+              Scan untuk <br /> buka Dashboard
+            </span>
+          </div>
         </div>
 
         {/* Kanan */}
