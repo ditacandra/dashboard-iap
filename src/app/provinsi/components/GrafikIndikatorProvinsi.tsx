@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import * as XLSX from "xlsx";
 import {
   BarChart,
@@ -135,7 +135,7 @@ const GrafikIndikatorProvinsi: React.FC<GrafikIndikatorProvinsiProps> = ({
         return a.Indikator.localeCompare(b.Indikator);
       });
 
-      // hitung growth antar tahun per indikator
+      // hitung growth antar tahun per indikator (persen) — tetap untuk label di atas batang
       const withGrowth: DataIndikatorProvinsi[] = [];
       let lastIndikator = "";
       let lastNilai: number | null = null;
@@ -216,6 +216,72 @@ const GrafikIndikatorProvinsi: React.FC<GrafikIndikatorProvinsiProps> = ({
     2024: "#FF5722",
   };
 
+  // === Ringkasan per indikator (bullet) menggunakan selisih poin, bukan persen ===
+  const bulletSummary = useMemo(() => {
+    if (!dataWithIndex.length) return null;
+
+    // Ambil semua tahun yang ada di data (non-gap & punya nilai)
+    const rows = dataWithIndex.filter(
+      (d) => !d._isGap && d.Nilai !== null && d.Nilai !== undefined
+    ) as Required<Pick<DataIndikatorProvinsi, "Indikator" | "Tahun" | "Nilai">>[];
+
+    if (!rows.length) return null;
+
+    const years = Array.from(new Set(rows.map((r) => Number(r.Tahun)))).sort(
+      (a, b) => a - b
+    );
+    const lastYear = years[years.length - 1];
+    const prevYear = years.length > 1 ? years[years.length - 2] : null;
+    const baseYear = 2021;
+
+    // Kelompokkan per indikator
+    const map: Record<
+      string,
+      { byYear: Record<number, number>; name: string }
+    > = {};
+
+    rows.forEach((r) => {
+      if (!map[r.Indikator]) {
+        map[r.Indikator] = { byYear: {}, name: r.Indikator };
+      }
+      map[r.Indikator].byYear[Number(r.Tahun)] = Number(r.Nilai);
+    });
+
+    const items = Object.values(map).map((g) => {
+      const lastVal = g.byYear[lastYear];
+      const prevVal = prevYear ? g.byYear[prevYear] : undefined;
+      const baseVal = g.byYear[baseYear];
+
+      const yoyDiff =
+        prevVal !== undefined && lastVal !== undefined
+          ? +(lastVal - prevVal).toFixed(2)
+          : null;
+      const vs2021Diff =
+        baseVal !== undefined && lastVal !== undefined
+          ? +(lastVal - baseVal).toFixed(2)
+          : null;
+
+      const arah = (v: number | null) =>
+        v === null ? "—" : v >= 0 ? "kenaikan" : "penurunan";
+
+      return {
+        indikator: g.name,
+        lastYear,
+        prevYear,
+        baseYear,
+        yoyDiff,
+        vs2021Diff,
+        arahYoY: arah(yoyDiff),
+        arah2021: arah(vs2021Diff),
+      };
+    });
+
+    // Urutkan alfabetis biar rapi (opsional)
+    items.sort((a, b) => a.indikator.localeCompare(b.indikator));
+
+    return { items, lastYear, prevYear, baseYear };
+  }, [dataWithIndex]);
+
   return (
     <div className="w-full p-4 bg-blue-50 rounded-xl">
       <h2 className="text-xl font-bold text-blue-600 mb-4">
@@ -287,6 +353,58 @@ const GrafikIndikatorProvinsi: React.FC<GrafikIndikatorProvinsiProps> = ({
           </ResponsiveContainer>
         </div>
       </div>
+
+      {/* 📝 Keterangan per indikator (bullet), di bagian paling bawah */}
+      {bulletSummary && (
+        <div className="mt-4 text-xs sm:text-sm text-gray-800">
+          <ol className="list-decimal list-outside pl-5 space-y-1 text-justify">
+            {bulletSummary.items.map(
+              ({
+                indikator,
+                yoyDiff,
+                vs2021Diff,
+                arahYoY,
+                arah2021,
+              }) => (
+                <li key={indikator}>
+                  Indikator <strong>{indikator}</strong> di tahun{" "}
+                  {bulletSummary.lastYear} menunjukkan {arahYoY}{" "}
+                  <span
+                    className={`font-semibold ${
+                      yoyDiff !== null
+                        ? yoyDiff >= 0
+                          ? "text-green-600"
+                          : "text-red-600"
+                        : ""
+                    }`}
+                  >
+                    {yoyDiff !== null
+                      ? Math.abs(yoyDiff).toFixed(2)
+                      : "tidak tersedia"}
+                  </span>{" "}
+                  poin dibandingkan tahun {bulletSummary.prevYear ?? "—"}, dan
+                  bila dibandingkan tahun {bulletSummary.baseYear} menunjukkan{" "}
+                  {arah2021}{" "}
+                  <span
+                    className={`font-semibold ${
+                      vs2021Diff !== null
+                        ? vs2021Diff >= 0
+                          ? "text-green-600"
+                          : "text-red-600"
+                        : ""
+                    }`}
+                  >
+                    {vs2021Diff !== null
+                      ? Math.abs(vs2021Diff).toFixed(2)
+                      : "tidak tersedia"}
+                  </span>{" "}
+                  poin.
+                </li>
+              )
+            )}
+          </ol>
+        </div>
+      )}
     </div>
   );
 };

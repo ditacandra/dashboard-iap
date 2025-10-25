@@ -74,7 +74,7 @@ const GrafikTrendIAPTahun: React.FC<GrafikTrendIAPTahunProps> = ({
       <h2 className="text-xl font-bold text-red-600 mb-4">
         Tren Capaian IAP {namaProvinsi} 2021–2024
       </h2>
-      <ResponsiveContainer width="100%" height={300}>
+      <ResponsiveContainer width="100%" height={370}>
         <BarChart
           data={data}
           layout="vertical"

@@ -156,7 +156,7 @@ export default function NasionalPage() {
             className="col-span-1 md:col-span-4 p-4 rounded-2xl bg-white/50 backdrop-blur-sm shadow-lg border border-gray-200 
                        overflow-x-auto md:overflow-visible"
           >
-            <div className="min-w-[400px] md:min-w-0" style={{ height: 330 }}>
+            <div className="min-w-[400px] md:min-w-0" style={{ height: 355 }}>
               <GrafikPerSila data={filteredSila} tahun={tahunTerpilih} />
             </div>
           </div>
@@ -189,7 +189,7 @@ export default function NasionalPage() {
             className="col-span-1 md:col-span-4 p-4 rounded-2xl bg-white/50 backdrop-blur-sm shadow-lg border border-gray-200 
                        overflow-x-auto md:overflow-visible"
           >
-            <div className="min-w-[400px] md:min-w-0" style={{ height: 330 }}>
+            <div className="min-w-[400px] md:min-w-0" style={{ height: 500 }}>
               <GrafikSilaPerTahun data={filteredSilaPerTahun} silaColors={silaColors} />
             </div>
           </div>

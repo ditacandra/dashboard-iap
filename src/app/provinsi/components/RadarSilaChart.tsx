@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import * as XLSX from "xlsx";
 import {
   Radar,
@@ -70,9 +70,7 @@ const RadarSilaChart: React.FC<RadarSilaChartProps> = ({ namaProvinsi }) => {
       }));
 
       // --- Daftar Tahun ---
-      const uniqueYears = Array.from(
-        new Set(mappedSila.map((d) => d.Tahun))
-      ).sort();
+      const uniqueYears = Array.from(new Set(mappedSila.map((d) => d.Tahun))).sort();
 
       setData(mappedSila);
       setIapData(mappedIap);
@@ -84,12 +82,37 @@ const RadarSilaChart: React.FC<RadarSilaChartProps> = ({ namaProvinsi }) => {
   }, [namaProvinsi]);
 
   // Filter data radar untuk tahun terpilih (exclude IAP)
-  const filteredRadar = data.filter(
-    (d) => d.Tahun === tahun && d.Sila.toLowerCase() !== "iap"
+  const filteredRadar = useMemo(
+    () => data.filter((d) => d.Tahun === tahun && d.Sila.toLowerCase() !== "iap"),
+    [data, tahun]
   );
 
   // Ambil nilai IAP untuk deskripsi
-  const nilaiIap = iapData.find((d) => d.Tahun === tahun)?.Nilai ?? null;
+  const nilaiIap = useMemo(
+    () => iapData.find((d) => d.Tahun === tahun)?.Nilai ?? null,
+    [iapData, tahun]
+  );
+
+  // 🔹 Ringkasan: sila dengan capaian tertinggi & terendah
+  const summary = useMemo(() => {
+    if (!filteredRadar.length) return null;
+
+    const maxVal = Math.max(...filteredRadar.map((r) => r.Nilai));
+    const minVal = Math.min(...filteredRadar.map((r) => r.Nilai));
+
+    const top = filteredRadar.filter((r) => r.Nilai === maxVal).map((r) => r.Sila);
+    const bottom = filteredRadar.filter((r) => r.Nilai === minVal).map((r) => r.Sila);
+
+    const join = (arr: string[]) =>
+      arr.length <= 2 ? arr.join(" dan ") : arr.slice(0, -1).join(", ") + " dan " + arr[arr.length - 1];
+
+    return {
+      topNames: join(top),
+      bottomNames: join(bottom),
+      maxVal,
+      minVal,
+    };
+  }, [filteredRadar]);
 
   return (
     <div className="w-full p-4 bg-blue-50 rounded-xl">
@@ -139,6 +162,20 @@ const RadarSilaChart: React.FC<RadarSilaChartProps> = ({ namaProvinsi }) => {
         <p className="mt-4 text-center text-gray-700 font-semibold">
           Indeks Aktualisasi Pancasila {tahun} :{" "}
           <span className="text-blue-600">{nilaiIap.toFixed(2)}</span>
+        </p>
+      )}
+
+      {/* 🔹 Keterangan tambahan (paling bawah) */}
+      {summary && tahun !== null && (
+        <p className="mt-3 text-sm text-gray-800 text-justify">
+          <span className="font-semibold">{summary.topNames}</span> merupakan sila
+          dengan capaian IAP tertinggi di Provinsi{" "}
+          <span className="font-semibold">{namaProvinsi}</span> pada tahun{" "}
+          <span className="font-semibold">{tahun}</span> dengan nilai capaian{" "}
+          <span className="font-semibold">{summary.maxVal.toFixed(2)}</span>.{" "}
+          Dan <span className="font-semibold">{summary.bottomNames}</span> merupakan
+          sila dengan capaian IAP terendah yaitu{" "}
+          <span className="font-semibold">{summary.minVal.toFixed(2)}</span>.
         </p>
       )}
     </div>

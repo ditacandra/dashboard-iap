@@ -62,7 +62,7 @@ export default function TabelProvinsi() {
   return (
     <div className="my-12 px-6 pt-6 mb-6">
       <h2 className="text-xl font-bold mb-4 text-white text-center underline decoration-4 decoration-white underline-offset-4 drop-shadow-sm">
-        Tabel Data Provinsi per Sila
+        Tabel Data Provinsi per Sila dan Indikator
       </h2>
 
       {/* Filter Dropdown → di luar kotak putih */}
